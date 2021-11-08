@@ -6,7 +6,7 @@ using namespace std;
 using namespace chrono;
 
 //funkcja do wypisania tablicy w formie spirali, przyjmuje trzy arguemnty tablicê, liczbê wierszy(rows - r), liczbê kolumn(columns - c)
-void printSpiral(int A[][5],int r,int c){
+void printSpiral(int **A,int r,int c){
     //4 zmienne pomocnicze oraz zmienna dir która okreœla kierunek po którym poruszamy siê po tablicy
     int T=0, B = r - 1, L = 0, R = c - 1, dir = 0;
 
@@ -43,12 +43,31 @@ void printSpiral(int A[][5],int r,int c){
 
 int main() {
     srand (time(NULL));
-    int rows=5, columns=5 ;
-
-    //tu zaczyna siê liczenie ile czasu wykonuje siê program
+    int rows, columns ;
+    cout<<"Podaj liczbe rzedow: ";
+    cin>>rows;
+    cout<<endl<<"Podaj liczbe kolumn: ";
+    cin>>columns;
+    //zaczyna liczenie czasu wykonywania programu
     auto start = high_resolution_clock::now();
+    //dynamiczna tablica
+    int** arr = new int*[rows];
 
-    int arr[5][5] = {{1,2,3,4,5}, {16,17,18,19,6}, {15,24,25,20,7}, {14,23,22,21,8}, {13,12,11,10,9}};
+    for(int i = 0; i<rows; i++){
+        arr[i] = new int[columns];
+    }
+
+    //wype³nienie jej losowymi danymi od 0 do 9
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < columns; j++)
+        {
+            arr[i][j] = rand() % 10;
+        }
+    }
+
+    cout<<"Polosowana tabela"<<endl;
+    //wyœwietlenie tablicy z wylosowanymi danymi
     for (int i = 0; i < rows; i++)
     {
         for (int j = 0; j < columns; j++)
@@ -65,7 +84,14 @@ int main() {
     //obliczanie ile czasu w mikrosekundach
     auto duration = duration_cast<microseconds>(stop - start);
     //wypisanie czasu
-    cout <<endl<< duration.count() << endl;
+    cout <<endl<<"Czas w mikrosekundach: "<<duration.count() << endl;
+
+    //czyszczenie pamiêci dynamicznej tablicy
+    for (int i = 0; i < rows; i++) {
+       delete [] arr[i];
+
+    }
+    delete [] arr;
     getch();
     return 0;
 }
